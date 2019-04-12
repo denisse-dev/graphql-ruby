@@ -1,12 +1,13 @@
 module Types
   class QueryType < BaseObject
-    # queries are just represented as fields
-    # `all_links` is automatically camelcased to `allLinks`
-    field :all_links, [LinkType], null: false
+    field :node, field: GraphQL::Relay::Node.field
+    field :nodes, field: GraphQL::Relay::Node.plural_field
 
-    # this method is invoked, when `all_link` fields is beeing resolved
-    def all_links
-      Link.all
+    field :all_links, function: Resolvers::LinksSearch
+    field :_all_links_meta, QueryMetaType, null: false
+
+    def _all_links_meta
+      Link.count
     end
   end
 end

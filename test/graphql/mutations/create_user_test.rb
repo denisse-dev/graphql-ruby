@@ -5,7 +5,7 @@ class Mutations::CreateUserTest < ActiveSupport::TestCase
     Mutations::CreateUser.new(object: nil, context: {}).resolve(args)
   end
 
-  test 'create new user' do
+  test 'success' do
     user = perform(
       name: 'Test User',
       auth_provider: {
@@ -19,5 +19,9 @@ class Mutations::CreateUserTest < ActiveSupport::TestCase
     assert user.persisted?
     assert_equal user.name, 'Test User'
     assert_equal user.email, 'email@example.com'
+  end
+
+  test 'failure' do
+    assert perform.is_a? GraphQL::ExecutionError
   end
 end
